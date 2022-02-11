@@ -23,6 +23,8 @@ void GameObject::Update(float t)
 
 	XMStoreFloat4x4(&_world, scale * rotation * translation);
 
+	Debug::StringDebug<string>("Test");
+
 	if (_parent != nullptr)
 	{
 		XMStoreFloat4x4(&_world, this->GetWorldMatrix() * _parent->GetWorldMatrix());
