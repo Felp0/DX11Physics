@@ -23,7 +23,8 @@ public:
 		std::cout << str_strm.str();
 
 		char sz[1024] = { 0 };
-		sprintf(sz, "%s \n", str_strm.str().c_str());
+		sprintf_s(sz, "%s \n", str_strm.str().c_str());
+		OutputDebugStringA(sz);
 	}
 };
 
