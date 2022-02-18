@@ -21,7 +21,7 @@
     <ClInclude Include="OBJLoader.h" />
     <ClInclude Include="Structures.h" />
     <ClInclude Include="Debug.h" />
-    <ClInclude Include="Vectors.h" />
+    <ClInclude Include="Vector3D.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
@@ -31,7 +31,7 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="OBJLoader.cpp" />
     <ClCompile Include="Debug.cpp" />
-    <ClCompile Include="Vectors.cpp" />
+    <ClCompile Include="Vector3D.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CLInclude Include="resource.h">
