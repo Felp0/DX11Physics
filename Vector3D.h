@@ -10,7 +10,7 @@ public:
 
 	//Constructor
 	Vector3D();
-	~Vector3D();
+	
 	
 	Vector3D(float xl, float yl, float zl = 0);
 

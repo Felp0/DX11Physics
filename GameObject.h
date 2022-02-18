@@ -71,6 +71,7 @@ private:
 	XMFLOAT3 _scale;
 
 	string _type;
+	string _typeOfObject;
 	
 
 	XMFLOAT4X4 _world;

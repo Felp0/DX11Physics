@@ -6,7 +6,7 @@ GameObject::GameObject(string type, Geometry geometry, Material material) : _geo
 	_position = XMFLOAT3();
 	_rotation = XMFLOAT3();
 	_scale = XMFLOAT3(1.0f, 1.0f, 1.0f);
-	
+	_typeOfObject = type;
 
 	_textureRV = nullptr;
 }
@@ -24,8 +24,17 @@ void GameObject::Update(float t)
 
 	XMStoreFloat4x4(&_world, scale * rotation * translation);
 
-	string _debugTest = "Test";
-	Debug::StringDebug<string>(_debugTest.c_str());
+	/*string _debugTest = "Test";
+	Debug::StringDebug<string>(_debugTest.c_str());*/
+
+	if (_typeOfObject == "Cube ")
+	{
+		float _time = t;
+		Debug::StringDebug<string>(_typeOfObject.c_str());
+		Debug::StringDebug<float>(_time);
+	}
+	
+	
 
 	if (_parent != nullptr)
 	{

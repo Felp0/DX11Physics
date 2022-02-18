@@ -36,6 +36,8 @@ using namespace DirectX;
 //	XMFLOAT2 Tex;
 //};
 
+#define NUMBER_OF_CUBES 1
+#define FPS_60 0.016f
 
 struct SurfaceInfo
 {

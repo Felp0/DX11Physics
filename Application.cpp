@@ -163,7 +163,7 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
 
 	_gameObjects.push_back(gameObject);
 
-	for (auto i = 0; i < 5; i++)
+	for (auto i = 0; i < NUMBER_OF_CUBES; i++)
 	{
 		gameObject = new GameObject("Cube " + i, cubeGeometry, shinyMaterial);
 		gameObject->SetScale(0.5f, 0.5f, 0.5f);
@@ -681,7 +681,7 @@ void Application::moveBackward(int objectNumber)
 void Application::Update()
 {
     // Update our time
-    static float timeSinceStart = 0.0f;
+    static float _deltaTime = 0.016f;
     static DWORD dwTimeStart = 0;
 
     DWORD dwTimeCur = GetTickCount64();
@@ -689,7 +689,12 @@ void Application::Update()
     if (dwTimeStart == 0)
         dwTimeStart = dwTimeCur;
 
-	timeSinceStart = (dwTimeCur - dwTimeStart) / 1000.0f;
+	_deltaTime += (dwTimeCur - dwTimeStart) / 1000.0f;
+
+	if (_deltaTime < FPS_60)
+	{
+		return;
+	}
 
 	// Move gameobject
 	if (GetAsyncKeyState('1'))
@@ -725,8 +730,11 @@ void Application::Update()
 	// Update objects
 	for (auto gameObject : _gameObjects)
 	{
-		gameObject->Update(timeSinceStart);
+		gameObject->Update(_deltaTime);
 	}
+
+	dwTimeStart = dwTimeCur;
+	_deltaTime = _deltaTime - FPS_60;
 }
 
 void Application::Draw()
