@@ -1,17 +1,19 @@
+
+
 #pragma once
 
 #include <directxmath.h>
 #include <d3d11_1.h>
 #include <string>
-#include "Debug.h"
+#include "Transform.h"
 
 using namespace DirectX;
 using namespace std;
 
 struct Geometry
 {
-	ID3D11Buffer * vertexBuffer;
-	ID3D11Buffer * indexBuffer;
+	ID3D11Buffer* vertexBuffer;
+	ID3D11Buffer* indexBuffer;
 	int numberOfIndices;
 
 	UINT vertexBufferStride;
@@ -33,7 +35,7 @@ public:
 	~GameObject();
 
 	// Setters and Getters for position/rotation/scale
-	void SetPosition(XMFLOAT3 position) { _position = position; }
+	/*void SetPosition(XMFLOAT3 position) { _position = position; }
 	void SetPosition(float x, float y, float z) { _position.x = x; _position.y = y; _position.z = z; }
 
 	XMFLOAT3 GetPosition() const { return _position; }
@@ -46,7 +48,7 @@ public:
 	void SetRotation(XMFLOAT3 rotation) { _rotation = rotation; }
 	void SetRotation(float x, float y, float z) { _rotation.x = x; _rotation.y = y; _rotation.z = z; }
 
-	XMFLOAT3 GetRotation() const { return _rotation; }
+	XMFLOAT3 GetRotation() const { return _rotation; }*/
 
 	string GetType() const { return _type; }
 
@@ -54,33 +56,35 @@ public:
 
 	Material GetMaterial() const { return _material; }
 
-	XMMATRIX GetWorldMatrix() const { return XMLoadFloat4x4(&_world); }
+	/*XMMATRIX GetWorldMatrix() const { return XMLoadFloat4x4(&_world); }*/
 
-	void SetTextureRV(ID3D11ShaderResourceView * textureRV) { _textureRV = textureRV; }
-	ID3D11ShaderResourceView * GetTextureRV() const { return _textureRV; }
+	void SetTextureRV(ID3D11ShaderResourceView* textureRV) { _textureRV = textureRV; }
+	ID3D11ShaderResourceView* GetTextureRV() const { return _textureRV; }
 	bool HasTexture() const { return _textureRV ? true : false; }
 
-	void SetParent(GameObject * parent) { _parent = parent; }
+	/*void SetParent(GameObject * parent) { _parent = parent; }*/
 
 	void Update(float t);
-	void Draw(ID3D11DeviceContext * pImmediateContext);
+	void Draw(ID3D11DeviceContext* pImmediateContext);
+
+
+	Transform* _transform;
 
 private:
-	XMFLOAT3 _position;
-	XMFLOAT3 _rotation;
-	XMFLOAT3 _scale;
+	//XMFLOAT3 _position; //3D position
+	//XMFLOAT3 _rotation; //3D position
+	//XMFLOAT3 _scale; //3D position
 
 	string _type;
-	string _typeOfObject;
-	
 
-	XMFLOAT4X4 _world;
+	//XMFLOAT4X4 _world;
 
 	Geometry _geometry;
 	Material _material;
 
-	ID3D11ShaderResourceView * _textureRV;
+	ID3D11ShaderResourceView* _textureRV;
 
-	GameObject * _parent;
+	//GameObject * _parent;
+
 };
 

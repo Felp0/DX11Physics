@@ -2,11 +2,10 @@
 
 GameObject::GameObject(string type, Geometry geometry, Material material) : _geometry(geometry), _type(type), _material(material)
 {
-	_parent = nullptr;
-	_position = XMFLOAT3();
-	_rotation = XMFLOAT3();
-	_scale = XMFLOAT3(1.0f, 1.0f, 1.0f);
-	_typeOfObject = type;
+
+
+	_transform = new Transform();
+
 
 	_textureRV = nullptr;
 }
@@ -18,31 +17,19 @@ GameObject::~GameObject()
 void GameObject::Update(float t)
 {
 	// Calculate world matrix
-	XMMATRIX scale = XMMatrixScaling(_scale.x, _scale.y, _scale.z);
-	XMMATRIX rotation = XMMatrixRotationX(_rotation.x) * XMMatrixRotationY(_rotation.y) * XMMatrixRotationZ(_rotation.z);
-	XMMATRIX translation = XMMatrixTranslation(_position.x, _position.y, _position.z);
+	XMMATRIX scale = XMMatrixScaling(_transform->_scale.x, _transform->_scale.y, _transform->_scale.z);
+	XMMATRIX rotation = XMMatrixRotationX(_transform->_rotation.x) * XMMatrixRotationY(_transform->_rotation.y) * XMMatrixRotationZ(_transform->_rotation.z);
+	XMMATRIX translation = XMMatrixTranslation(_transform->_position.x, _transform->_position.y, _transform->_position.z);
 
-	XMStoreFloat4x4(&_world, scale * rotation * translation);
+	XMStoreFloat4x4(&_transform->_world, scale * rotation * translation);
 
-	/*string _debugTest = "Test";
-	Debug::StringDebug<string>(_debugTest.c_str());*/
-
-	if (_typeOfObject == "Cube ")
+	if (_transform->_parent != nullptr)
 	{
-		float _time = t;
-		Debug::StringDebug<string>(_typeOfObject.c_str());
-		Debug::StringDebug<float>(_time);
-	}
-	
-	
-
-	if (_parent != nullptr)
-	{
-		XMStoreFloat4x4(&_world, this->GetWorldMatrix() * _parent->GetWorldMatrix());
+		XMStoreFloat4x4(&_transform->_world, this->_transform->GetWorldMatrix() * _transform->GetWorldMatrix());
 	}
 }
 
-void GameObject::Draw(ID3D11DeviceContext * pImmediateContext)
+void GameObject::Draw(ID3D11DeviceContext* pImmediateContext)
 {
 	// NOTE: We are assuming that the constant buffers and all other draw setup has already taken place
 
