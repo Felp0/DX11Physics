@@ -6,32 +6,34 @@
 #include <d3d11_1.h>
 #include <string>
 #include "Transform.h"
+#include "ParticalModel.h"
+#include "Apperance.h"
 
 using namespace DirectX;
 using namespace std;
 
-struct Geometry
-{
-	ID3D11Buffer* vertexBuffer;
-	ID3D11Buffer* indexBuffer;
-	int numberOfIndices;
-
-	UINT vertexBufferStride;
-	UINT vertexBufferOffset;
-};
-
-struct Material
-{
-	XMFLOAT4 diffuse;
-	XMFLOAT4 ambient;
-	XMFLOAT4 specular;
-	float specularPower;
-};
+//struct Geometry
+//{
+//	ID3D11Buffer* vertexBuffer;
+//	ID3D11Buffer* indexBuffer;
+//	int numberOfIndices;
+//
+//	UINT vertexBufferStride;
+//	UINT vertexBufferOffset;
+//};
+//
+//struct Material
+//{
+//	XMFLOAT4 diffuse;
+//	XMFLOAT4 ambient;
+//	XMFLOAT4 specular;
+//	float specularPower;
+//};
 
 class GameObject
 {
 public:
-	GameObject(string type, Geometry geometry, Material material);
+	GameObject(string type, Apperance* apperance);
 	~GameObject();
 
 	// Setters and Getters for position/rotation/scale
@@ -52,15 +54,15 @@ public:
 
 	string GetType() const { return _type; }
 
-	Geometry GetGeometryData() const { return _geometry; }
+	//Geometry GetGeometryData() const { return _geometry; }
 
-	Material GetMaterial() const { return _material; }
+	/*Material GetMaterial() const { return _material; }*/
 
 	/*XMMATRIX GetWorldMatrix() const { return XMLoadFloat4x4(&_world); }*/
 
-	void SetTextureRV(ID3D11ShaderResourceView* textureRV) { _textureRV = textureRV; }
+	/*void SetTextureRV(ID3D11ShaderResourceView* textureRV) { _textureRV = textureRV; }
 	ID3D11ShaderResourceView* GetTextureRV() const { return _textureRV; }
-	bool HasTexture() const { return _textureRV ? true : false; }
+	bool HasTexture() const { return _textureRV ? true : false; }*/
 
 	/*void SetParent(GameObject * parent) { _parent = parent; }*/
 
@@ -69,6 +71,8 @@ public:
 
 
 	Transform* _transform;
+	ParticalModel* _model;
+	Apperance* _apperance;
 
 private:
 	//XMFLOAT3 _position; //3D position
@@ -79,10 +83,10 @@ private:
 
 	//XMFLOAT4X4 _world;
 
-	Geometry _geometry;
-	Material _material;
+	//Geometry _geometry;
+	/*Material _material;*/
 
-	ID3D11ShaderResourceView* _textureRV;
+	/*ID3D11ShaderResourceView* _textureRV;*/
 
 	//GameObject * _parent;
 

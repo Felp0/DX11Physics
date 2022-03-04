@@ -34,6 +34,9 @@ public:
 
 	XMMATRIX GetWorldMatrix() const { return XMLoadFloat4x4(&_world); }
 
+	void Update(float t);
+	
+
 
 	XMFLOAT3 _position; //3D position
 	XMFLOAT3 _rotation; //3D position
