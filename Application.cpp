@@ -152,9 +152,8 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
 	noSpecMaterial.diffuse = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
 	noSpecMaterial.specular = XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f);
 	noSpecMaterial.specularPower = 0.0f;
-
 	
-	GameObject* gameObject = new GameObject("Floor", new Apperance(planeGeometry, noSpecMaterial));
+	GameObject* gameObject = new GameObject("Floor", new Apperance(planeGeometry, noSpecMaterial), new Transform(), new ParticalModel());
 	gameObject->_transform->SetPosition(0.0f, 0.0f, 0.0f);
 	gameObject->_transform->SetScale(15.0f, 15.0f, 15.0f);
 	gameObject->_transform->SetRotation(XMConvertToRadians(90.0f), 0.0f, 0.0f);
@@ -164,14 +163,14 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
 
 	for (auto i = 0; i < 5; i++)
 	{
-		gameObject = new GameObject("Cube " + i, new Apperance(cubeGeometry, shinyMaterial));
+		gameObject = new GameObject("Cube " + i, new Apperance(cubeGeometry, shinyMaterial), new Transform(), new ParticalModel());
 		gameObject->_transform->SetScale(0.5f, 0.5f, 0.5f);
 		gameObject->_transform->SetPosition(-4.0f + (i * 2.0f), 0.5f, 10.0f);
 		gameObject->_apperance->SetTextureRV(_pTextureRV);
 
 		_gameObjects.push_back(gameObject);
 	}
-	gameObject = new GameObject("donut", new Apperance(herculesGeometry, shinyMaterial));
+	gameObject = new GameObject("donut", new Apperance(herculesGeometry, shinyMaterial), new Transform(), new ParticalModel());
 	gameObject->_transform->SetScale(0.5f, 0.5f, 0.5f);
 	gameObject->_transform->SetPosition(-4.0f, 0.5f, 10.0f);
 	gameObject->_apperance->SetTextureRV(_pTextureRV);
@@ -665,14 +664,14 @@ void Application::Cleanup()
 
 void Application::moveForward(int objectNumber)
 {
-	XMFLOAT3 position = _gameObjects[objectNumber]->_transform->GetPosition();
+	Vector3D position = _gameObjects[objectNumber]->_transform->GetPosition();
 	position.z -= 0.02f;
 	_gameObjects[objectNumber]->_transform->SetPosition(position);
 }
 
 void Application::moveBackward(int objectNumber)
 {
-	XMFLOAT3 position = _gameObjects[objectNumber-2]->_transform->GetPosition();
+	Vector3D position = _gameObjects[objectNumber-2]->_transform->GetPosition();
 	position.z += 0.02f;
 	_gameObjects[objectNumber-2]->_transform->SetPosition(position);
 }
@@ -696,8 +695,10 @@ void Application::Update()
 	}
 
 	// Move gameobject
-	if (GetAsyncKeyState('1'))
+	if (GetKeyState('1') & 0x8000)
 	{
+		string _debugTest = "1 pressed";
+		Debug::StringDebug(_debugTest.c_str());
 		moveForward(1);
 	}
 	if (GetAsyncKeyState('2'))

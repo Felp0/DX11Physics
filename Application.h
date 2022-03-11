@@ -10,6 +10,7 @@
 #include "Camera.h"
 #include "Structures.h"
 #include "OBJLoader.h"
+#include "Debug.h"
 
 #include <vector>
 /*

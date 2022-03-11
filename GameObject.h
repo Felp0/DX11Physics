@@ -33,7 +33,7 @@ using namespace std;
 class GameObject
 {
 public:
-	GameObject(string type, Apperance* apperance);
+	GameObject(string type, Apperance* apperance, Transform* transform, ParticalModel* particalmodel);
 	~GameObject();
 
 	// Setters and Getters for position/rotation/scale
@@ -73,6 +73,10 @@ public:
 	Transform* _transform;
 	ParticalModel* _model;
 	Apperance* _apperance;
+
+	Apperance* GetApperance() const { return _apperance; }
+	Transform* GetTransform() const { return _transform; }
+	ParticalModel* GetParticalModel() const { return _model; }
 
 private:
 	//XMFLOAT3 _position; //3D position
