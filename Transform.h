@@ -19,8 +19,9 @@ public:
 	void SetPosition(Vector3D position) { _position = position; }
 	void SetPosition(float x, float y, float z) { _position.x = x; _position.y = y; _position.z = z; }
 
-	Vector3D GetPosition() const { return _position; }
 
+	Vector3D GetPosition() const { return _position; }
+	
 	void SetScale(Vector3D scale) { _scale = scale; }
 	void SetScale(float x, float y, float z) { _scale.x = x; _scale.y = y; _scale.z = z; }
 

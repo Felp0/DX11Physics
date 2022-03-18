@@ -11,6 +11,7 @@
 #include "Structures.h"
 #include "OBJLoader.h"
 #include "Debug.h"
+#include "Transform.h"
 
 #include <vector>
 /*
@@ -130,6 +131,23 @@ private:
 
 	ID3D11RasterizerState* CCWcullMode;
 	ID3D11RasterizerState* CWcullMode;
+
+	Vector3D m_velocity;
+	Vector3D m_acceleration;
+	Vector3D m_mass;
+	Vector3D m_netForce;
+
+	Transform* m_floorTransform;
+	Transform* m_cubeTransform; //Do I need to set this to nullprt ? is this right?
+	Transform* m_donutTransform;
+
+	Apperance* m_floorApperance;
+	Apperance* m_cubeApperance;
+	Apperance* m_donutApperance;
+
+	ParticalModel* m_floorModel;
+	ParticalModel* m_cubeModel;
+	ParticalModel* m_donutModel;
 
 private:
 	HRESULT InitWindow(HINSTANCE hInstance, int nCmdShow);

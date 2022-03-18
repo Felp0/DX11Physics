@@ -89,6 +89,7 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
         return E_FAIL;
 	}
 
+
     RECT rc;
     GetClientRect(_hWnd, &rc);
     _WindowWidth = rc.right - rc.left;
@@ -152,28 +153,53 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
 	noSpecMaterial.diffuse = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
 	noSpecMaterial.specular = XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f);
 	noSpecMaterial.specularPower = 0.0f;
+
+	//Setup Vectors
+	m_velocity = Vector3D(0.0f, 0.0f, 0.0f);
+	m_acceleration = Vector3D(0.0f, 0.0f , 0.0f);
+	m_mass = Vector3D();
+	m_netForce = Vector3D();
+
+	//Setup Apperance
+	m_floorApperance = new Apperance(planeGeometry, noSpecMaterial);
+	m_cubeApperance = new Apperance(cubeGeometry, shinyMaterial);
+	m_donutApperance = new Apperance(herculesGeometry, shinyMaterial);
+
+	//Setup Transforms
+	m_floorTransform = new Transform();
+	m_cubeTransform = new Transform();
+	m_donutTransform = new Transform();
+
+	//Setup Partical Models
+	m_floorModel = new ParticalModel(m_floorTransform, true, m_mass, m_netForce, m_velocity, m_acceleration);
+	m_cubeModel = new ParticalModel(m_cubeTransform, true, m_mass, m_netForce, m_velocity, m_acceleration);
+	m_donutModel = new ParticalModel(m_donutTransform, true, m_mass, m_netForce, m_velocity, m_acceleration);
+
 	
-	GameObject* gameObject = new GameObject("Floor", new Apperance(planeGeometry, noSpecMaterial), new Transform(), new ParticalModel());
-	gameObject->_transform->SetPosition(0.0f, 0.0f, 0.0f);
-	gameObject->_transform->SetScale(15.0f, 15.0f, 15.0f);
-	gameObject->_transform->SetRotation(XMConvertToRadians(90.0f), 0.0f, 0.0f);
-	gameObject->_apperance->SetTextureRV(_pGroundTextureRV);
+	GameObject* gameObject = new GameObject("Floor", m_floorApperance, m_floorTransform, m_floorModel);
+	gameObject->GetTransform()->SetPosition(0.0f, 0.0f, 0.0f);
+	gameObject->GetTransform()->SetScale(15.0f, 15.0f, 15.0f);
+	gameObject->GetTransform()->SetRotation(XMConvertToRadians(90.0f), 0.0f, 0.0f);
+	gameObject->GetApperance()->SetTextureRV(_pGroundTextureRV);
 
 	_gameObjects.push_back(gameObject);
 
 	for (auto i = 0; i < 5; i++)
 	{
-		gameObject = new GameObject("Cube " + i, new Apperance(cubeGeometry, shinyMaterial), new Transform(), new ParticalModel());
-		gameObject->_transform->SetScale(0.5f, 0.5f, 0.5f);
-		gameObject->_transform->SetPosition(-4.0f + (i * 2.0f), 0.5f, 10.0f);
-		gameObject->_apperance->SetTextureRV(_pTextureRV);
+		gameObject = new GameObject("Cube " + i, m_cubeApperance, new Transform(), m_cubeModel);
+		gameObject->GetTransform()->SetScale(0.5f, 0.5f, 0.5f);
+		gameObject->GetTransform()->SetPosition(-4.0f + (i * 2.0f), 0.5f, 10.0f);
+		gameObject->GetApperance()->SetTextureRV(_pTextureRV);
+		gameObject->GetParticalModel()->SetUsingConstVec(false);
+		gameObject->GetParticalModel()->SetVelocity(0.0f, 0.1f, 0.0f);
+		gameObject->GetParticalModel()->SetAcceleration(Vector3D(0.0f, 0.1f, 0.0f));
 
 		_gameObjects.push_back(gameObject);
 	}
-	gameObject = new GameObject("donut", new Apperance(herculesGeometry, shinyMaterial), new Transform(), new ParticalModel());
-	gameObject->_transform->SetScale(0.5f, 0.5f, 0.5f);
-	gameObject->_transform->SetPosition(-4.0f, 0.5f, 10.0f);
-	gameObject->_apperance->SetTextureRV(_pTextureRV);
+	gameObject = new GameObject("donut", m_donutApperance, m_donutTransform, m_donutModel);
+	gameObject->GetTransform()->SetScale(0.5f, 0.5f, 0.5f);
+	gameObject->GetTransform()->SetPosition(-4.0f, 0.5f, 10.0f);
+	gameObject->GetApperance()->SetTextureRV(_pTextureRV);
 	_gameObjects.push_back(gameObject);
 	return S_OK;
 }
@@ -699,7 +725,8 @@ void Application::Update()
 	{
 		string _debugTest = "1 pressed";
 		Debug::StringDebug(_debugTest.c_str());
-		moveForward(1);
+		//moveForward(1);
+		
 	}
 	if (GetAsyncKeyState('2'))
 	{
