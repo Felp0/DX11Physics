@@ -11,7 +11,7 @@ Vector3D::Vector3D(float xl, float yl, float zl )
 {
 	x = xl;
 	y = yl;
-	z = yl;
+	z = zl;
 }
 
 

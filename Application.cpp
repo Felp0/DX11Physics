@@ -157,8 +157,8 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
 	//Setup Vectors
 	m_velocity = Vector3D(0.0f, 0.0f, 0.0f);
 	m_acceleration = Vector3D(0.0f, 0.0f , 0.0f);
-	m_mass = Vector3D();
-	m_netForce = Vector3D();
+	m_mass = 1.0f;
+	m_netForce = Vector3D(0.0f, 0.0f, 0.0f);
 
 	//Setup Apperance
 	m_floorApperance = new Apperance(planeGeometry, noSpecMaterial);
@@ -167,14 +167,11 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
 
 	//Setup Transforms
 	m_floorTransform = new Transform();
-	m_cubeTransform = new Transform();
 	m_donutTransform = new Transform();
 
 	//Setup Partical Models
-	m_floorModel = new ParticalModel(m_floorTransform, true, m_mass, m_netForce, m_velocity, m_acceleration);
-	m_cubeModel = new ParticalModel(m_cubeTransform, true, m_mass, m_netForce, m_velocity, m_acceleration);
-	m_donutModel = new ParticalModel(m_donutTransform, true, m_mass, m_netForce, m_velocity, m_acceleration);
-
+	m_floorModel = new ParticalModel(m_floorTransform, true, m_mass, Vector3D(0.0f, 0.0f, 0.0f), m_velocity, m_acceleration);
+	m_donutModel = new ParticalModel(m_donutTransform, true, m_mass, Vector3D(0.0f, 0.0f, 0.0f) , m_velocity, m_acceleration);
 	
 	GameObject* gameObject = new GameObject("Floor", m_floorApperance, m_floorTransform, m_floorModel);
 	gameObject->GetTransform()->SetPosition(0.0f, 0.0f, 0.0f);
@@ -186,17 +183,20 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
 
 	for (auto i = 0; i < 5; i++)
 	{
-		gameObject = new GameObject("Cube " + i, m_cubeApperance, new Transform(), m_cubeModel);
+		 m_cubeTransform = new Transform();
+		gameObject = new GameObject("Cube " + i, m_cubeApperance, m_cubeTransform, new ParticalModel(m_cubeTransform, true, m_mass, m_netForce, m_velocity, m_acceleration ));
 		gameObject->GetTransform()->SetScale(0.5f, 0.5f, 0.5f);
 		gameObject->GetTransform()->SetPosition(-4.0f + (i * 2.0f), 0.5f, 10.0f);
 		gameObject->GetApperance()->SetTextureRV(_pTextureRV);
 		gameObject->GetParticalModel()->SetUsingConstVec(false);
-		gameObject->GetParticalModel()->SetVelocity(0.0f, 0.1f, 0.0f);
+		gameObject->GetParticalModel()->SetVelocity(0.0f, 0.0f, 0.0f);
 		gameObject->GetParticalModel()->SetAcceleration(Vector3D(0.0f, 0.1f, 0.0f));
+		
+		
 
 		_gameObjects.push_back(gameObject);
 	}
-	gameObject = new GameObject("donut", m_donutApperance, m_donutTransform, m_donutModel);
+	gameObject = new GameObject("donut", m_donutApperance, m_donutTransform, new ParticalModel(m_donutTransform, true, m_mass, Vector3D(0.0f, 0.0f, 0.0f) , m_velocity, m_acceleration));
 	gameObject->GetTransform()->SetScale(0.5f, 0.5f, 0.5f);
 	gameObject->GetTransform()->SetPosition(-4.0f, 0.5f, 10.0f);
 	gameObject->GetApperance()->SetTextureRV(_pTextureRV);
@@ -728,9 +728,12 @@ void Application::Update()
 		//moveForward(1);
 		
 	}
-	if (GetAsyncKeyState('2'))
+	if (GetAsyncKeyState(VK_F1))
 	{
-		moveForward(2);
+		string test = "pressed";
+		Debug::StringDebug(test.c_str());
+		_gameObjects[2]->GetParticalModel()->AddForce(Vector3D(10.0f, 0.0f, 0.0f));;
+		
 	}
 
 	if (GetAsyncKeyState('3'))

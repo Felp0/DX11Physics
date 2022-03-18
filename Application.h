@@ -134,8 +134,9 @@ private:
 
 	Vector3D m_velocity;
 	Vector3D m_acceleration;
-	Vector3D m_mass;
 	Vector3D m_netForce;
+
+	float m_mass;
 
 	Transform* m_floorTransform;
 	Transform* m_cubeTransform; //Do I need to set this to nullprt ? is this right?

@@ -12,7 +12,7 @@ public:
 	Vector3D();
 	
 	
-	Vector3D(float xl, float yl, float zl = 0);
+	Vector3D(float xl, float yl, float zl );
 
 	//Operators
 	Vector3D operator+(const Vector3D &vec); //addition
