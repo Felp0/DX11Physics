@@ -12,16 +12,18 @@ class Transform;
 using namespace DirectX;
 using namespace std;
 
-class ParticalModel
+class ParticleModel
 {
 public:
 
-	ParticalModel(Transform* transform, bool useConstVelocity, float mass, Vector3D netForce, Vector3D velocity, Vector3D acceleration);
-	~ParticalModel();
+	ParticleModel(Transform* transform, bool useConstVelocity, float mass, Vector3D netForce, Vector3D velocity, Vector3D acceleration);
+	~ParticleModel();
 
 	void Update(float deltatime);
 	void UpdateAcceleration(float deltatime);
 	void UpdateNetForce(float deltatime);
+	void MotionInFluid(float deltatime);
+	void DragForce(Vector3D velocity);
 	void MoveConstantVelocity( float deltaTime);
 
 	void SetConstantVelocity(Vector3D velocity);
@@ -31,6 +33,8 @@ public:
 	void SetMass(float mass);
 	void SetNetForce(Vector3D netforce);
 	void SetUsingConstVec(bool set);
+	void SetWeight(Vector3D weight);
+	void SetGravity(Vector3D gravity);
 
 	void Move(float deltaTime);
 	void Break(float deltaTime);
@@ -41,6 +45,8 @@ public:
 	Vector3D GetConstantVelocity() { return m_velocity; }
 	Vector3D GetAcceleration() { return m_acceleration; }
 	Vector3D GetNetForce() { return m_netForce; }
+	Vector3D GetWeight() { return m_weight; }
+	Vector3D GetGravity() { return m_gravity; }
 	
 	float GetMass() { return m_mass; }
 
@@ -48,8 +54,15 @@ public:
 	Vector3D m_acceleration;
 	Vector3D m_netForce;
 	Vector3D m_force;
+	Vector3D m_weight;
+	Vector3D m_gravity;
+
+	Vector3D m_cubeDragForce;
 
 	float m_mass;
+	float m_density;
+	float m_dragCoefficient;
+	float m_referenceArea;
 
 	bool m_useConstVelocity;
 

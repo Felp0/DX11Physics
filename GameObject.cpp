@@ -1,6 +1,6 @@
 #include "GameObject.h"
 
-GameObject::GameObject(string type, Apperance* apperance, Transform* transform, ParticalModel* particalmodel) : _type(type)
+GameObject::GameObject(string type, Apperance* apperance, Transform* transform, ParticleModel* particalmodel) : _type(type)
 {
 
 

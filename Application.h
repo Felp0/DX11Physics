@@ -146,9 +146,9 @@ private:
 	Apperance* m_cubeApperance;
 	Apperance* m_donutApperance;
 
-	ParticalModel* m_floorModel;
-	ParticalModel* m_cubeModel;
-	ParticalModel* m_donutModel;
+	ParticleModel* m_floorModel;
+	ParticleModel* m_cubeModel;
+	ParticleModel* m_donutModel;
 
 private:
 	HRESULT InitWindow(HINSTANCE hInstance, int nCmdShow);

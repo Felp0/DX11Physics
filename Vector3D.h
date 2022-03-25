@@ -20,6 +20,7 @@ public:
 	Vector3D operator-(const Vector3D &vec); //Subtraction
 	Vector3D &operator-=(const Vector3D &vec); //assign new result to vector
 	Vector3D operator*(float value); //multiplication
+	Vector3D operator*(const Vector3D& vec) { return Vector3D(x * vec.x, y * vec.y, z * vec.z); }; //multiplication
 	Vector3D &operator*=(float value); //assign new result to vector
 	Vector3D operator/(float value); //division
 	Vector3D &operator/=(float value); //assign new result to vector
