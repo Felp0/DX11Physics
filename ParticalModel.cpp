@@ -1,10 +1,11 @@
 #include "ParticalModel.h"
 #include "Transform.h"
 
-ParticleModel::ParticleModel(Transform* transform, bool useConstVelocity, float mass, Vector3D netForce, Vector3D velocity, Vector3D acceleration) 
+ParticleModel::ParticleModel(Transform* transform, bool useConstVelocity,bool useDrag, float mass, Vector3D netForce, Vector3D velocity, Vector3D acceleration) 
 {
 	m_gravity = Vector3D(0.0f, -9.8f, 0.0f);
 	m_velocity = velocity;
+	m_useDrag = useDrag;
 	m_acceleration = acceleration;
 	m_useConstVelocity = useConstVelocity;
 	m_mass = mass;
@@ -12,18 +13,14 @@ ParticleModel::ParticleModel(Transform* transform, bool useConstVelocity, float 
 	m_weight = m_gravity * m_mass;
 	_transform = transform;
 
-	//turbulant
-	/*float temp = 0.5f * m_density * m_dragCoefficient * m_referenceArea;
-	Vector3D drag = velocity;
-	drag.Normalization();
-	drag = drag * drag * temp;*/
+	//dragFactor
+	m_density = 1.225f;
+	m_dragCoefficient = 1.05f;
+	m_referenceArea = 1.0f;
+	m_dragFactor = 0.5f * m_density * m_dragCoefficient * m_referenceArea;
+	
 
-
-	//Laminar
-	//float temp = 0.5f * m_density * m_dragCoefficient * m_referenceArea;
-	//Vector3D drag = velocity;
-	//drag.Normalization();
-	//drag = drag * temp;
+	
 }
 
 
@@ -33,6 +30,19 @@ void ParticleModel::UpdateNetForce(float deltatime)
 	m_netForce.y += m_force.y;
 	m_netForce.z += m_force.z;
 }
+
+void ParticleModel::DragForce()
+{
+	if (m_useDrag == true)
+	{
+		DragLamForce(m_velocity);
+	}
+	else
+	{
+		DragTurbForce(m_velocity);
+	}
+}
+
 
 void ParticleModel::UpdateAcceleration(float deltatime)
 {
@@ -46,6 +56,37 @@ void ParticleModel::AddForce(Vector3D IncomingForce)
 	m_netForce.x += IncomingForce.x;
 	m_netForce.y += IncomingForce.y;
 	m_netForce.z += IncomingForce.z;
+}
+
+void ParticleModel::DragLamForce(Vector3D velocity)
+{
+	
+	Vector3D drag = velocity;
+	if (velocity.Magnitude() < 0.01f) return;
+
+	drag.Normalization();
+	drag *= m_dragFactor;
+
+	m_netForce += drag * -1;
+}
+
+void ParticleModel::DragTurbForce(Vector3D velocity)
+{
+	
+	Vector3D drag = velocity;
+
+	if (velocity.Magnitude() < 0.01f) return;
+
+	drag.Normalization();
+
+	float velMag = velocity.Magnitude();
+	Vector3D UnitVel = velocity.Normalization();
+
+	float dragMag = m_dragFactor * velMag * velMag;
+	drag* dragMag;
+
+
+	m_netForce += drag * -1;
 }
 
 void ParticleModel::MoveConstantVelocity( float deltaTime)
@@ -77,7 +118,7 @@ void ParticleModel::Update(float deltatime)
 {
 	
 		
-	
+	DragForce();
 	
 	UpdateNetForce(deltatime);
 	UpdateAcceleration(deltatime);

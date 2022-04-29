@@ -16,14 +16,15 @@ class ParticleModel
 {
 public:
 
-	ParticleModel(Transform* transform, bool useConstVelocity, float mass, Vector3D netForce, Vector3D velocity, Vector3D acceleration);
+	ParticleModel(Transform* transform, bool useConstVelocity, bool useDrag, float mass, Vector3D netForce, Vector3D velocity, Vector3D acceleration);
 	~ParticleModel();
 
 	void Update(float deltatime);
 	void UpdateAcceleration(float deltatime);
 	void UpdateNetForce(float deltatime);
-	void MotionInFluid(float deltatime);
-	void DragForce(Vector3D velocity);
+	void DragForce();
+	void DragLamForce(Vector3D velocity);
+	void DragTurbForce(Vector3D velocity);
 	void MoveConstantVelocity( float deltaTime);
 
 	void SetConstantVelocity(Vector3D velocity);
@@ -56,6 +57,7 @@ public:
 	Vector3D m_force;
 	Vector3D m_weight;
 	Vector3D m_gravity;
+	
 
 	Vector3D m_cubeDragForce;
 
@@ -63,8 +65,10 @@ public:
 	float m_density;
 	float m_dragCoefficient;
 	float m_referenceArea;
+	float m_dragFactor;
 
 	bool m_useConstVelocity;
+	bool m_useDrag;
 
 	Transform* _transform;
 

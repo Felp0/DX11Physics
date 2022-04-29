@@ -25,6 +25,8 @@
     <ClInclude Include="Transform.h" />
     <ClInclude Include="ParticalModel.h" />
     <ClInclude Include="Apperance.h" />
+    <ClInclude Include="Quaternion.h" />
+    <ClInclude Include="RigidBody.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
@@ -38,6 +40,7 @@
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="ParticalModel.cpp" />
     <ClCompile Include="Apperance.cpp" />
+    <ClCompile Include="RigidBody.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CLInclude Include="resource.h">

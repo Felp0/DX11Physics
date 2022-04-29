@@ -379,6 +379,7 @@
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="OBJLoader.cpp" />
     <ClCompile Include="ParticalModel.cpp" />
+    <ClCompile Include="RigidBody.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="Vector3D.cpp" />
   </ItemGroup>
@@ -397,7 +398,9 @@
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="OBJLoader.h" />
     <ClInclude Include="ParticalModel.h" />
+    <ClInclude Include="Quaternion.h" />
     <CLInclude Include="resource.h" />
+    <ClInclude Include="RigidBody.h" />
     <ClInclude Include="Structures.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Vector3D.h" />
