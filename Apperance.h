@@ -46,6 +46,7 @@ public:
 
 	Geometry _geometry;
 	Material _material;
+	
 	ID3D11ShaderResourceView* _textureRV;
 
 };

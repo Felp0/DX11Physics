@@ -34,7 +34,7 @@ using namespace std;
 class GameObject
 {
 public:
-	GameObject(string type, Apperance* apperance, Transform* transform, ParticleModel* particalmodel);
+	GameObject(string type, Apperance* apperance, Transform* transform, ParticleModel* particalmodel, RigidBody* rigidbody);
 	~GameObject();
 
 	// Setters and Getters for position/rotation/scale

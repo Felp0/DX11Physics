@@ -95,6 +95,7 @@ void RigidBody::calculateAngle(float deltatime)
 
 void RigidBody::update(float deltaTime)
 {
+	
 	angularAcceleration();
 	TorqueVector(XMFLOAT3(5.0f, 5.0f, 5.0f), XMFLOAT3(1.0f, 1.0f, 1.0f));
 	updateAngularVelocity(deltaTime);
