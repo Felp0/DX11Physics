@@ -125,6 +125,7 @@ void ParticleModel::Update(float deltatime)
 
 	
 	Move(deltatime);
+	
 
 	m_netForce = Vector3D(0.0f, 0.0f, 0.0f);
 	m_acceleration = Vector3D(0.0f, 0.0f, 0.0f);

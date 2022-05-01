@@ -17,9 +17,9 @@ GameObject::~GameObject()
 
 void GameObject::Update(float t)
 {
-	
 	_model->Update(t);
 	_transform->Update(t);
+	_rigid->update(t);
 	
 }
 

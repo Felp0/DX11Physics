@@ -3,10 +3,12 @@
 #include <d3d11_1.h>
 #include "Vector3D.h"
 #include "Debug.h"
+
 #include <vector>
 
 
 class Transform;
+
 
 
 using namespace DirectX;
@@ -71,6 +73,7 @@ public:
 	bool m_useDrag;
 
 	Transform* _transform;
+	
 
 	//vector<GameObject*> _gameObjects;
 };
