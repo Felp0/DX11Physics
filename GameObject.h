@@ -8,6 +8,7 @@
 #include "Transform.h"
 #include "ParticalModel.h"
 #include "Apperance.h"
+#include "RigidBody.h"
 
 using namespace DirectX;
 using namespace std;
@@ -33,7 +34,7 @@ using namespace std;
 class GameObject
 {
 public:
-	GameObject(string type, Apperance* apperance, Transform* transform, ParticleModel* particalmodel);
+	GameObject(string type, Apperance* apperance, Transform* transform, ParticleModel* particalmodel, RigidBody* rigidbody);
 	~GameObject();
 
 	// Setters and Getters for position/rotation/scale
@@ -73,6 +74,8 @@ public:
 	Transform* _transform;
 	ParticleModel* _model;
 	Apperance* _apperance;
+	RigidBody* _rigid;
+	
 
 	Apperance* GetApperance() const { return _apperance; }
 	Transform* GetTransform() const { return _transform; }

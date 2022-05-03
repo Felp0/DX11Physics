@@ -150,6 +150,8 @@ private:
 	ParticleModel* m_cubeModel;
 	ParticleModel* m_donutModel;
 
+	RigidBody* m_rigidBody;
+
 private:
 	HRESULT InitWindow(HINSTANCE hInstance, int nCmdShow);
 	HRESULT InitDevice();
