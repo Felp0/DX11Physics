@@ -1,17 +1,17 @@
 #include "ParticalModel.h"
 #include "Transform.h"
 
-ParticleModel::ParticleModel(Transform* transform, bool useConstVelocity,bool useDrag, float mass, Vector3D netForce, Vector3D velocity, Vector3D acceleration) 
+ParticleModel::ParticleModel(Transform* transform, bool useConstVelocity,bool useDrag, float mass, Vector3D netForce, Vector3D velocity, Vector3D acceleration) :
+	m_gravity(0.0f, -9.8f, 0.0f),
+	m_velocity(velocity),
+	m_useDrag(useDrag),
+	m_acceleration(acceleration),
+	m_useConstVelocity(useConstVelocity),
+	m_mass(mass),
+	m_netForce(netForce),
+	m_weight(m_gravity * m_mass),
+	_transform(transform)
 {
-	m_gravity = Vector3D(0.0f, -9.8f, 0.0f);
-	m_velocity = velocity;
-	m_useDrag = useDrag;
-	m_acceleration = acceleration;
-	m_useConstVelocity = useConstVelocity;
-	m_mass = mass;
-	m_netForce = netForce;
-	m_weight = m_gravity * m_mass;
-	_transform = transform;
 
 	//dragFactor
 	m_density = 1.225f;

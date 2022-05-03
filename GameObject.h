@@ -6,7 +6,6 @@
 #include <d3d11_1.h>
 #include <string>
 #include "Transform.h"
-#include "ParticalModel.h"
 #include "Apperance.h"
 #include "RigidBody.h"
 
@@ -34,7 +33,7 @@ using namespace std;
 class GameObject
 {
 public:
-	GameObject(string type, Apperance* apperance, Transform* transform, ParticleModel* particalmodel, RigidBody* rigidbody);
+	GameObject(string type, Apperance* apperance, Transform* transform, RigidBody* rigidbody);
 	~GameObject();
 
 	// Setters and Getters for position/rotation/scale
@@ -79,7 +78,9 @@ public:
 
 	Apperance* GetApperance() const { return _apperance; }
 	Transform* GetTransform() const { return _transform; }
-	ParticleModel* GetParticalModel() const { return _model; }
+	RigidBody* GetRigidBody() const { return _rigid; }
+
+
 
 private:
 	//XMFLOAT3 _position; //3D position
