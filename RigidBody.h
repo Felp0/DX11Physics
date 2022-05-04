@@ -1,13 +1,15 @@
 #pragma once
 
-#include "ParticalModel.h"
+#include "ParticalModel.h";
 #include "Quaternion.h"
 
-class RigidBody
+
+
+class RigidBody : public ParticleModel
 {
 public:
 
-	RigidBody();
+	RigidBody(Transform* transform, bool useConstVelocity, bool useDrag, float mass, Vector3D netForce, Vector3D velocity, Vector3D acceleration);
 	
 	
 
@@ -20,11 +22,13 @@ public:
 	void angularAcceleration();
 
 
-	XMFLOAT3X3		m_intertiaTensor;
+	XMMATRIX		m_intertiaTensor;
 
 	XMFLOAT3		m_angularAcceleration;
 	XMFLOAT3		m_torque;
 	XMFLOAT3		m_angularVelocity;
+
+	
 
 	float			m_angularDamping;
 

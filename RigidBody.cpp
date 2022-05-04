@@ -1,10 +1,28 @@
 #include "RigidBody.h"
+#include "Transform.h"
 
 
-RigidBody::RigidBody()
+RigidBody::RigidBody(Transform* transform, bool useConstVelocity, bool useDrag, float mass, Vector3D netForce, Vector3D velocity, Vector3D acceleration) : 
+	ParticleModel(transform, useConstVelocity, useDrag, mass, netForce, velocity, acceleration)
 {
-	m_intertiaTensor = XMFLOAT3X3(m_intertiaTensor._11 = 11.0f, m_intertiaTensor._12 = 12.0f, m_intertiaTensor._13 = 13.0f, m_intertiaTensor._21 = 14.0f, m_intertiaTensor._22 = 22.0f,
-								m_intertiaTensor._23 = 23.0f, m_intertiaTensor._31 = 31.0f, m_intertiaTensor._32 = 32.0f, m_intertiaTensor._33 = 33.0f);
+	XMFLOAT3X3 m_intertiaMatrix = XMFLOAT3X3();
+
+	
+
+	m_intertiaMatrix._11 = mass* ( std::pow(1,2) / 6 );//mass
+	m_intertiaMatrix._12 = 0;
+	m_intertiaMatrix._13 = 0;
+
+	m_intertiaMatrix._21 = 0;
+	m_intertiaMatrix._22 = mass * (std::pow(1, 2) / 6);//mass
+	m_intertiaMatrix._23 = 0;
+
+	m_intertiaMatrix._31 = 0;
+	m_intertiaMatrix._32 = 0;
+	m_intertiaMatrix._33 = mass * (std::pow(1, 2) / 6);//mass
+
+	m_intertiaTensor = XMLoadFloat3x3(&m_intertiaMatrix);
+
 
 	m_angularDamping = 0.99f;
 	m_angularAcceleration = XMFLOAT3(0.0f, 0.0f, 0.0f);
@@ -31,11 +49,11 @@ XMVECTOR RigidBody::TorqueVector(XMFLOAT3 force, XMFLOAT3 position)
 void RigidBody::angularAcceleration()
 {
 	
-	XMMATRIX m_intertia = XMLoadFloat3x3(&m_intertiaTensor);
+	
 
-	XMMATRIX m_inverse = XMMatrixInverse(&TorqueVector(XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT3(1.0f, 1.0f, 1.0f)), m_intertia);
+	XMMATRIX m_inverse = XMMatrixInverse(&TorqueVector(XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT3(1.0f, 1.0f, 1.0f)), m_intertiaTensor);
 
-	XMVECTOR m_angular = XMVector3Transform(TorqueVector(XMFLOAT3(1.0f,1.0f,1.0f),XMFLOAT3(1.0f,1.0f,1.0f)), m_intertia);
+	XMVECTOR m_angular = XMVector3Transform(TorqueVector(XMFLOAT3(1.0f,1.0f,1.0f),XMFLOAT3(1.0f,1.0f,1.0f)), m_intertiaTensor);
 
 	XMVECTOR temp = XMLoadFloat3(&m_angularAcceleration);
 
@@ -75,9 +93,8 @@ void RigidBody::addDamping(float deltatime)
 void RigidBody::calculateAngle(float deltatime)
 {
 	Quaternion quaternion = Quaternion(2.0f, 2.0f, 2.0f, 1.0f);
-	XMMATRIX m_intertia = XMLoadFloat3x3(&m_intertiaTensor);
 	
-
+	
 	Vector3D bullshit;
 	bullshit.x = m_angularVelocity.x;
 	bullshit.y = m_angularVelocity.y;
@@ -87,7 +104,7 @@ void RigidBody::calculateAngle(float deltatime)
 	quaternion.addScaledVector(bullshit, deltatime);
 	quaternion.normalise();
 
-	CalculateTransformMatrixRowMajor(m_intertia, Vector3D(1.0f, 1.0f, 1.0f), quaternion);
+	CalculateTransformMatrixRowMajor(m_intertiaTensor, Vector3D(1.0f, 1.0f, 1.0f), quaternion);
 
 
 
@@ -95,10 +112,10 @@ void RigidBody::calculateAngle(float deltatime)
 
 void RigidBody::update(float deltaTime)
 {
-	
+	ParticleModel::Update(deltaTime);
+	/*TorqueVector(XMFLOAT3(5.0f, 5.0f, 5.0f), XMFLOAT3(1.0f, 1.0f, 1.0f));
 	angularAcceleration();
-	TorqueVector(XMFLOAT3(5.0f, 5.0f, 5.0f), XMFLOAT3(1.0f, 1.0f, 1.0f));
 	updateAngularVelocity(deltaTime);
-	calculateAngle(deltaTime);
 	addDamping(deltaTime);
+	calculateAngle(deltaTime);*/
 }
