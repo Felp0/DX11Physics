@@ -193,7 +193,7 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
 	for (auto i = 0; i < 1; i++)
 	{
 		 m_cubeTransform = new Transform();
-		gameObject = new GameObject("Cube " + i, m_cubeApperance, m_cubeTransform, new RigidBody(m_cubeTransform,false, true, 1.0f, Vector3D(), Vector3D(), Vector3D()));
+		gameObject = new GameObject("Cube " + i, m_cubeApperance, m_cubeTransform, new RigidBody(m_cubeTransform,false, false, 1.0f, Vector3D(), Vector3D(), Vector3D()));
 		gameObject->GetTransform()->SetScale(0.5f, 0.5f, 0.5f);
 		gameObject->GetTransform()->SetPosition(-4.0f + (i * 2.0f), 0.5f, 10.0f);
 		gameObject->GetApperance()->SetTextureRV(_pTextureRV);
@@ -714,6 +714,44 @@ void Application::moveBackward(int objectNumber)
 	_gameObjects[objectNumber-2]->_transform->SetPosition(position);
 }
 
+void Application::rotateLeft(int objectNumber)
+{
+	_gameObjects[objectNumber]->GetRigidBody()->TorqueVector(XMFLOAT3(0.0f, 0.0f, 2.0f), XMFLOAT3(1.0f, 1.0f, 0.0f));;
+}
+void Application::rotateRight(int objectNumber)
+{
+	_gameObjects[objectNumber]->GetRigidBody()->TorqueVector(XMFLOAT3(0.0f, 0.0f, 2.0f), XMFLOAT3(-1.0f, -1.0f, 0.0f));;
+}
+void Application::rotateDown(int objectNumber)
+{
+	_gameObjects[objectNumber]->GetRigidBody()->TorqueVector(XMFLOAT3(0.0f, 0.0f, 2.0f), XMFLOAT3(0.0f, -1.0f, 0.0f));;
+}
+void Application::rotateUp(int objectNumber)
+{
+	_gameObjects[objectNumber]->GetRigidBody()->TorqueVector(XMFLOAT3(0.0f, 0.0f, 2.0f), XMFLOAT3(0.0f, 1.0f, 0.0f));;
+}
+
+void Application::dragForceLeft(int objectNumber)
+{
+	m_rigidBody->m_useDrag = true;
+	_gameObjects[objectNumber]->GetRigidBody()->AddForce(Vector3D(1.0f, 0.0f, 0.0f));
+}
+void Application::dragForceRight(int objectNumber)
+{
+	m_rigidBody->m_useDrag = true;
+	_gameObjects[objectNumber]->GetRigidBody()->AddForce(Vector3D(-1.0f, 0.0f, 0.0f));
+}
+void Application::dragForceDown(int objectNumber)
+{
+	m_rigidBody->m_useDrag = true;
+	_gameObjects[objectNumber]->GetRigidBody()->AddForce(Vector3D(0.0f, -1.0f, 0.0f));
+}
+void Application::dragForceUp(int objectNumber)
+{
+	m_rigidBody->m_useDrag = true;
+	_gameObjects[objectNumber]->GetRigidBody()->AddForce(Vector3D(0.0f, 1.0f, 0.0f));
+}
+
 void Application::Update()
 {
     // Update our time
@@ -733,29 +771,58 @@ void Application::Update()
 	}
 
 	// Move gameobject
-	if (GetKeyState('1') & 0x8000)
-	{
-		string _debugTest = "1 pressed";
-		Debug::StringDebug(_debugTest.c_str());
-		//moveForward(1);
-		
-	}
 	if (GetAsyncKeyState(VK_F1))
 	{
 		string test = "pressed";
 		Debug::StringDebug(test.c_str());
-		_gameObjects[1]->GetRigidBody()->TorqueVector(XMFLOAT3(0.0f, 0.0f, 2.0f), XMFLOAT3(1.0f, 1.0f, 0.0f));;
-		
+		rotateLeft(1);
+		m_rigidBody->m_useDrag = true;
+		_gameObjects[1]->GetRigidBody()->AddForce(Vector3D(1.0f, 0.0f, 0.0f));
 		
 	}
+	if (GetAsyncKeyState(VK_F2))
+	{	
+		rotateRight(1);
+		
+	}
+	if (GetAsyncKeyState(VK_F3))
+	{
+		rotateDown(1);
+	}
+	if (GetAsyncKeyState(VK_F4))
+	{
+		rotateUp(1);
+	}
+	if (GetKeyState(VK_NUMPAD1))
+	{
+		string _debugTest = "1 pressed";
+		Debug::StringDebug(_debugTest.c_str());
+		//moveForward(1);
+		/*dragForceLeft(1);*/
+		/*_gameObjects[1]->GetRigidBody()->SetUsingConstVec(true);
+		_gameObjects[1]->GetRigidBody()->SetVelocity(0.0f, 0.1f, 0.0f);*/
 
-	if (GetAsyncKeyState('3'))
-	{
-		moveBackward(3);
+		m_rigidBody->m_useDrag = true;
+		_gameObjects[1]->GetRigidBody()->AddForce(Vector3D(1.0f, 0.0f, 0.0f));
+		
 	}
-	if (GetAsyncKeyState('4'))
+	if (GetKeyState(VK_NUMPAD2))
 	{
-		moveBackward(4);
+		dragForceRight(1);
+	}
+	if (GetAsyncKeyState(VK_NUMPAD3))
+	{
+		dragForceDown(1);
+		/*_gameObjects[3]->GetRigidBody()->SetUsingConstVec(true);
+		_gameObjects[3]->GetRigidBody()->SetVelocity(0.0f, 0.1f, 0.0f);*/
+		//moveBackward(1);
+	}
+	if (GetAsyncKeyState(VK_NUMPAD4))
+	{
+		dragForceUp(1);
+		/*_gameObjects[4]->GetRigidBody()->SetUsingConstVec(true);
+		_gameObjects[4]->GetRigidBody()->SetVelocity(0.0f, 0.1f, 0.0f);*/
+		//moveBackward(1);
 	}
 	// Update camera
 	float angleAroundZ = XMConvertToRadians(_cameraOrbitAngleXZ);

@@ -164,6 +164,16 @@ private:
 	void moveForward(int objectNumber);
 	void moveBackward(int objectNumber);
 
+	void rotateRight(int objectNumber);
+	void rotateLeft(int objectNumber);
+	void rotateDown(int objectNumber);
+	void rotateUp(int objectNumber);
+
+	void dragForceLeft(int objectNumber);
+	void dragForceRight(int objectNumber);
+	void dragForceDown(int objectNumber);
+	void dragForceUp(int objectNumber);
+
 public:
 	Application();
 	~Application();

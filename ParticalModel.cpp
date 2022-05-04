@@ -33,9 +33,15 @@ void ParticleModel::UpdateNetForce(float deltatime)
 
 void ParticleModel::DragForce()
 {
-	if (!m_useDrag) return;
-
+	if (!m_useDrag) 
+	{
+		return;
+	}
+	else
+	{ 
 		DragLamForce(m_velocity);
+	}
+
 	
 
 		//DragTurbForce(m_velocity);
