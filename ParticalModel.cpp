@@ -33,14 +33,13 @@ void ParticleModel::UpdateNetForce(float deltatime)
 
 void ParticleModel::DragForce()
 {
-	if (m_useDrag == true)
-	{
+	if (!m_useDrag) return;
+
 		DragLamForce(m_velocity);
-	}
-	else
-	{
-		DragTurbForce(m_velocity);
-	}
+	
+
+		//DragTurbForce(m_velocity);
+	
 }
 
 
@@ -100,9 +99,9 @@ void ParticleModel::MoveConstantVelocity( float deltaTime)
 void ParticleModel::Move(float deltaTime)
 {
 	
-	  _transform->SetPosition(_transform->GetPosition().x + GetConstantVelocity().x* deltaTime + m_acceleration.x * 0.5f * deltaTime * deltaTime,
-		_transform->GetPosition().y + GetConstantVelocity().y * deltaTime + m_acceleration.y * 0.5f * deltaTime * deltaTime,
-		_transform->GetPosition().z + GetConstantVelocity().z * deltaTime + m_acceleration.z + 0.5f * deltaTime * deltaTime);
+	  _transform->SetPosition(_transform->GetPosition().x + m_velocity.x * deltaTime + m_acceleration.x * 0.5f * deltaTime * deltaTime,
+		_transform->GetPosition().y + m_velocity.y * deltaTime + m_acceleration.y * 0.5f * deltaTime * deltaTime,
+		_transform->GetPosition().z + m_velocity.z * deltaTime + m_acceleration.z + 0.5f * deltaTime * deltaTime);
 
 	SetVelocity(m_velocity.x + m_acceleration.x * deltaTime,
 		m_velocity.y + m_acceleration.y * deltaTime,

@@ -3,7 +3,7 @@
 #include <directxmath.h>
 #include <d3d11_1.h>
 #include "Vector3D.h"
-
+#include "Quaternion.h"
 
 using namespace DirectX;
 using namespace std;
@@ -27,10 +27,12 @@ public:
 
 	Vector3D GetScale() const { return _scale; }
 
-	void SetRotation(Vector3D rotation) { _rotation = rotation; }
-	void SetRotation(float x, float y, float z) { _rotation.x = x; _rotation.y = y; _rotation.z = z; }
+	void SetRotation(Vector3D rotation);
+	void SetRotation(float x, float y, float z);
+	void SetRotation(Quaternion orientation) { _orientation = orientation; }
 
-	Vector3D GetRotation() const { return _rotation; }
+	Quaternion GetRotation() const { return _orientation; }
+	Vector3D GetRotationEuler() const{ return Vector3D(); }
 
 	void SetParent(GameObject* parent) { _parent = parent; }
 
@@ -43,6 +45,8 @@ public:
 	Vector3D _position; //3D position
 	Vector3D _rotation; //3D position
 	Vector3D _scale; //3D position
+
+	Quaternion _orientation;
 
 	XMFLOAT4X4 _world;
 

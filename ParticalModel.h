@@ -41,6 +41,7 @@ public:
 	void Move(float deltaTime);
 	void Break(float deltaTime);
 	void AddForce(Vector3D IncomingForce);
+	void SetUseGravity(bool in) { m_UseGravity = in; }
 
 	Vector3D GetConstantVelocity() { return m_velocity; }
 	Vector3D GetAcceleration() { return m_acceleration; }
@@ -68,6 +69,7 @@ public:
 
 	bool m_useConstVelocity;
 	bool m_useDrag;
+	bool m_UseGravity = true;
 
 	
 

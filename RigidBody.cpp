@@ -51,33 +51,27 @@ void RigidBody::angularAcceleration()
 	
 	
 
-	XMMATRIX m_inverse = XMMatrixInverse(&TorqueVector(XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT3(1.0f, 1.0f, 1.0f)), m_intertiaTensor);
+	XMMATRIX m_inverse = XMMatrixInverse(nullptr, m_intertiaTensor);
 
-	XMVECTOR m_angular = XMVector3Transform(TorqueVector(XMFLOAT3(1.0f,1.0f,1.0f),XMFLOAT3(1.0f,1.0f,1.0f)), m_intertiaTensor);
+	XMVECTOR m_angular = XMVector3Transform(XMLoadFloat3(&m_torque), m_intertiaTensor);
 
 	XMVECTOR temp = XMLoadFloat3(&m_angularAcceleration);
 
-	temp = XMVector3Transform(TorqueVector(XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT3(1.0f, 1.0f, 1.0f)), m_inverse);
+	//temp = XMVector3Transform(TorqueVector(XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT3(1.0f, 1.0f, 1.0f)), m_inverse);
 
-	XMStoreFloat3(&m_angularAcceleration, temp);
+	XMStoreFloat3(&m_angularAcceleration, m_angular);
 }
 
 void RigidBody::updateAngularVelocity(float deltaTime)
 {
-	XMFLOAT3 zero = XMFLOAT3(0.0f, 0.0f, 0.0f);
-
-	XMVECTOR angularV = XMLoadFloat3(&zero);
-
-	XMVECTOR temp = XMLoadFloat3(&m_angularVelocity);
+	XMVECTOR angularV = XMLoadFloat3(&m_angularVelocity);
 	XMVECTOR tempAcceleration = XMLoadFloat3(&m_angularAcceleration);
 
-	temp = angularV + tempAcceleration * deltaTime;
+	angularV = angularV + tempAcceleration * deltaTime;
 
-	XMStoreFloat3(&m_angularVelocity, temp);
-	XMStoreFloat3(&m_angularAcceleration, tempAcceleration);
-
-
-
+	XMStoreFloat3(&m_angularVelocity, angularV);
+	m_angularAcceleration = XMFLOAT3(0, 0, 0);
+	m_torque = XMFLOAT3(0.0f, 0.0f, 0.0f);
 }
 
 void RigidBody::addDamping(float deltatime)
@@ -85,37 +79,37 @@ void RigidBody::addDamping(float deltatime)
 	XMVECTOR temp = XMLoadFloat3(&m_angularVelocity);
 	
 
-	temp = temp * m_angularDamping * deltatime;
+	temp = temp * m_angularDamping;
 
 	XMStoreFloat3(&m_angularVelocity, temp);
 }
 
 void RigidBody::calculateAngle(float deltatime)
 {
-	Quaternion quaternion = Quaternion(2.0f, 2.0f, 2.0f, 1.0f);
 	
+	Quaternion rotation = _transform->GetRotation();
+
+
+	Vector3D angularVelocity;
+	angularVelocity.x = m_angularVelocity.x;
+	angularVelocity.y = m_angularVelocity.y;
+	angularVelocity.z = m_angularVelocity.z;
+
+
+	rotation.addScaledVector(angularVelocity, deltatime);
+	rotation.normalise();
+
 	
-	Vector3D bullshit;
-	bullshit.x = m_angularVelocity.x;
-	bullshit.y = m_angularVelocity.y;
-	bullshit.z = m_angularVelocity.z;
-
-
-	quaternion.addScaledVector(bullshit, deltatime);
-	quaternion.normalise();
-
-	CalculateTransformMatrixRowMajor(m_intertiaTensor, Vector3D(1.0f, 1.0f, 1.0f), quaternion);
-
-
-
+	_transform->SetRotation(rotation);
 }
 
 void RigidBody::update(float deltaTime)
 {
 	ParticleModel::Update(deltaTime);
-	/*TorqueVector(XMFLOAT3(5.0f, 5.0f, 5.0f), XMFLOAT3(1.0f, 1.0f, 1.0f));
+
+	//TorqueVector(XMFLOAT3(0.0f, 0.0f, 2.0f), XMFLOAT3(1.0f, 1.0f, -1.0f));
 	angularAcceleration();
 	updateAngularVelocity(deltaTime);
 	addDamping(deltaTime);
-	calculateAngle(deltaTime);*/
+	calculateAngle(deltaTime);
 }

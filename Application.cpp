@@ -155,9 +155,9 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
 	noSpecMaterial.specularPower = 0.0f;
 
 	//Setup Vectors
-	m_velocity = Vector3D(1.0f, 1.0f, 1.0f);
+	m_velocity = Vector3D(0.0f, 0.0f, 0.0f);
 	m_acceleration = Vector3D(1.0f, 0.0f , 0.0f);
-	m_mass = 1.0f;
+	m_mass = D3D11_FLOAT32_MAX;
 	m_netForce = Vector3D(0.0f, 0.1f, 0.0f);
 
 	//Setup Apperance
@@ -175,11 +175,13 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
 
 	//setpud rigid
 	m_rigidBody = new RigidBody(m_floorTransform, true, true, m_mass, Vector3D(0.0f, 0.0f, 0.0f), m_velocity, m_acceleration);
-	
+	m_rigidBody->SetUseGravity(false);
+	m_rigidBody->m_useDrag = false;
+
 	GameObject* gameObject = new GameObject("Floor", m_floorApperance, m_floorTransform,m_rigidBody);
 	gameObject->GetTransform()->SetPosition(0.0f, 0.0f, 0.0f);
 	gameObject->GetTransform()->SetScale(15.0f, 15.0f, 15.0f);
-	gameObject->GetTransform()->SetRotation(XMConvertToRadians(90.0f), 0.0f, 0.0f);
+	gameObject->GetTransform()->SetRotation(90.0f, 0.0f, 0.0f);
 	gameObject->GetApperance()->SetTextureRV(_pGroundTextureRV);
 
 	string test = "floor: " + std::to_string(gameObject->GetTransform()->GetPosition().z);
@@ -188,15 +190,15 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
 
 	_gameObjects.push_back(gameObject);
 
-	for (auto i = 0; i < 5; i++)
+	for (auto i = 0; i < 1; i++)
 	{
 		 m_cubeTransform = new Transform();
-		gameObject = new GameObject("Cube " + i, m_cubeApperance, m_cubeTransform, m_rigidBody);
+		gameObject = new GameObject("Cube " + i, m_cubeApperance, m_cubeTransform, new RigidBody(m_cubeTransform,false, true, 1.0f, Vector3D(), Vector3D(), Vector3D()));
 		gameObject->GetTransform()->SetScale(0.5f, 0.5f, 0.5f);
 		gameObject->GetTransform()->SetPosition(-4.0f + (i * 2.0f), 0.5f, 10.0f);
 		gameObject->GetApperance()->SetTextureRV(_pTextureRV);
-		gameObject->GetRigidBody()->SetUsingConstVec(true);
-		gameObject->GetRigidBody()->SetVelocity(0.0f, 0.1f, 0.0f);
+		//gameObject->GetRigidBody()->SetUsingConstVec(true);
+		//gameObject->GetRigidBody()->SetVelocity(0.0f, 0.1f, 0.0f);
 		gameObject->GetRigidBody()->SetAcceleration(Vector3D(1.0f, 0.1f, 0.0f));
 
 		string test = "cube" + std::to_string(gameObject->GetTransform()->GetPosition().z);
@@ -206,7 +208,7 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
 
 		_gameObjects.push_back(gameObject);
 	}
-	gameObject = new GameObject("donut", m_donutApperance, m_donutTransform, m_rigidBody);
+	gameObject = new GameObject("donut", m_donutApperance, m_donutTransform, new RigidBody(m_cubeTransform, false, true, 1.0f, Vector3D(), Vector3D(), Vector3D()));
 	gameObject->GetTransform()->SetScale(0.5f, 0.5f, 0.5f);
 	gameObject->GetTransform()->SetPosition(-4.0f, 0.5f, 10.0f);
 	gameObject->GetApperance()->SetTextureRV(_pTextureRV);
@@ -742,7 +744,7 @@ void Application::Update()
 	{
 		string test = "pressed";
 		Debug::StringDebug(test.c_str());
-		_gameObjects[2]->GetRigidBody()->AddForce(Vector3D(10.0f, 0.0f, 0.0f));;
+		_gameObjects[1]->GetRigidBody()->TorqueVector(XMFLOAT3(0.0f, 0.0f, 2.0f), XMFLOAT3(1.0f, 1.0f, 0.0f));;
 		
 		
 	}

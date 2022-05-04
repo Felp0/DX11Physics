@@ -30,7 +30,7 @@ public:
 
 	
 
-	float			m_angularDamping;
+	float			m_angularDamping = 0.99f;
 
 };
 
